@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Reddit & RedGIFs Batch Downloader",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Save Reddit and RedGIFs videos automatically into Downloads/videos/category/title.mp4. No downloader server required.",
   "action": {
     "default_title": "Open Reddit & RedGIFs Batch Downloader"

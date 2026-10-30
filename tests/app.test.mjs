@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
-import { MAX_URLS, parseVideoUrls } from '../dist/chrome/video-batch.mjs';
+import { parseVideoUrls } from '../dist/chrome/video-batch.mjs';
 import { filterResults, exportResults, resultGroup } from '../dist/chrome/results.mjs';
 
 test('table keeps invalid/duplicate rows and exports only the active filter after a batch', async () => {
@@ -18,7 +18,7 @@ test('table keeps invalid/duplicate rows and exports only the active filter afte
   let exported; const savedOptions = [];
   const source = (await readFile(new URL('../dist/chrome/app.mjs', import.meta.url), 'utf8')).replace(/^import .+;\n/gm, '');
   vm.runInNewContext(source, {
-    MAX_URLS, parseVideoUrls, filterResults, exportResults, resultGroup, Blob, AbortController,
+    parseVideoUrls, filterResults, exportResults, resultGroup, Blob, AbortController,
     importFile: async () => '',
     downloadVideo: async url => { if (url.includes('/bad/')) throw new Error('Provider rejected file'); return { blob: new Blob(['mp4']), filename: 'other/title.mp4', note: 'Done' }; },
     saveVideo: async (blob, filename, options) => { savedOptions.push(options); assert.equal(ids.overwrite.disabled, true); return { filename: 'videos/other/title.mp4' }; },
@@ -46,4 +46,12 @@ test('table keeps invalid/duplicate rows and exports only the active filter afte
   ids.overwrite.checked = true;
   await ids.start.handlers.click();
   assert.equal(savedOptions.at(-1).overwrite, true);
+  const before = savedOptions.length;
+  ids.urls.value = Array.from({ length: 60 }, (_, i) => `https://redd.it/post${i}`).join('\n');
+  ids.urls.handlers.input();
+  assert.equal(ids.start.disabled, false);
+  await ids.start.handlers.click();
+  assert.equal(savedOptions.length - before, 60);
+  assert.match(ids.status.textContent, /60 of 60 videos saved/);
+  assert.equal(ids.start.disabled, false);
 });

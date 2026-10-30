@@ -1,8 +1,8 @@
 # Reddit & RedGIFs Batch Downloader
 
-Chrome extension v1.3.1. Downloads supported Reddit and RedGIFs videos directly into `Downloads/videos/{category}/{title}.mp4`. No VPS, local download server, yt-dlp or FFmpeg is required.
+Chrome extension v1.3.2. Downloads supported Reddit and RedGIFs videos directly into `Downloads/videos/{category}/{title}.mp4`. No VPS, local download server, yt-dlp or FFmpeg is required.
 
-[Download Chrome extension v1.3.1](https://github.com/irahulsaini/reddit-video-download-chrome-extension/raw/refs/tags/v1.3.1/dist/reddit-video-downloader-chrome-1.3.1.zip) · [Website tool and installation guide](https://www.irahulsaini.com/tools/reddit-video-downloader)
+[Download Chrome extension v1.3.2](https://github.com/irahulsaini/reddit-video-download-chrome-extension/raw/refs/tags/v1.3.2/dist/reddit-video-downloader-chrome-1.3.2.zip) · [Website tool and installation guide](https://www.irahulsaini.com/tools/reddit-video-downloader)
 
 ## Install
 
@@ -16,7 +16,7 @@ To update an existing installation, replace its files with the new package, clic
 
 ## Features
 
-- 25 unique URLs per batch; 100 MB per video, no combined ZIP limit.
+- No URL-count cap. Videos are downloaded and saved sequentially, with 100 MB per video and no combined ZIP limit.
 - Automatic saves under `videos/{category}/{title}.mp4` inside your configured Downloads directory. The first RedGIFs hashtag selects the category; native Reddit clips and untagged videos use `other/`.
 - Reddit titles preserved for posts linking to RedGIFs; duplicate filenames numbered by Chrome by default. Check **Overwrite existing files** before starting to replace an exact category/filename match instead. The option is off by default and locked while the batch runs.
 - Accepts full post URLs and `/r/`, `/user/` and `/u/` share links, including relative Reddit post/share paths.
@@ -47,7 +47,7 @@ npm test
 - `src/`: extension application and Manifest V3 configuration.
 - `lib/`: self-contained URL validation and file-import helpers.
 - `dist/chrome/`: installable unpacked extension.
-- `dist/reddit-video-downloader-chrome-1.3.1.zip`: packaged extension, with `manifest.json` at the ZIP root.
+- `dist/reddit-video-downloader-chrome-1.3.2.zip`: packaged extension, with `manifest.json` at the ZIP root.
 
 The regression tests cover URL validation, media extraction, streamed size limits, filters, exports, download completion/cancellation and packaging. Real Chrome/provider behavior still needs live verification.
 

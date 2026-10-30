@@ -1,4 +1,4 @@
-import { MAX_URLS, parseVideoUrls } from './video-batch.mjs';
+import { parseVideoUrls } from './video-batch.mjs';
 import { importFile } from './video-import.mjs';
 import { downloadVideo } from './direct.mjs';
 import { saveVideo } from './save-video.mjs';
@@ -23,9 +23,8 @@ function inspect() {
   const rows = parseVideoUrls($('urls').value);
   const count = rows.filter(row => row.status === 'Ready').length;
   $('counts').textContent = `${count} valid unique URLs · ${rows.filter(r => r.status === 'Duplicate').length} duplicates · ${rows.filter(r => r.status === 'Invalid').length} unsupported URLs`;
-  $('start').disabled = running || !count || count > MAX_URLS;
+  $('start').disabled = running || !count;
   if (!running) render(rows);
-  if (count > MAX_URLS) status(`Reduce the batch to ${MAX_URLS} unique videos.`);
   return rows;
 }
 $('filter').addEventListener('change', () => render());
@@ -51,7 +50,7 @@ $('stop').addEventListener('click', () => controller?.abort());
 $('start').addEventListener('click', async () => {
   const rows = inspect().map(row => ({ ...row, status: row.status === 'Ready' ? 'Queued' : row.status }));
   const countQueued = rows.filter(row => row.status === 'Queued').length;
-  if (!countQueued || countQueued > MAX_URLS || running) return;
+  if (!countQueued || running) return;
   const overwrite = $('overwrite').checked;
   running = true; controller = new AbortController();
   for (const id of ['urls', 'file', 'clear', 'start', 'overwrite']) $(id).disabled = true;
@@ -82,7 +81,7 @@ $('start').addEventListener('click', async () => {
     running = false; controller = null; $('stop').hidden = true; $('stop').disabled = false;
     for (const id of ['urls', 'file', 'clear', 'overwrite']) $(id).disabled = false;
     const ready = parseVideoUrls($('urls').value).filter(row => row.status === 'Ready').length;
-    $('start').disabled = !ready || ready > MAX_URLS;
+    $('start').disabled = !ready;
   }
 });
 window.addEventListener('beforeunload', event => {
