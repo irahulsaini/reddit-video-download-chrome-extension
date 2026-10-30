@@ -5,3 +5,5 @@ footer a:hover { color: #fff; }
 footer a:focus-visible { outline: 2px solid #8edcff; outline-offset: 3px; }
 
 .result-controls{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-top:24px}.result-controls label{margin-top:0}.result-controls select{background:#0c1525;color:inherit;border:1px solid var(--border);border-radius:8px;padding:11px;font:inherit;min-width:170px}tr[data-status="failed"] td:nth-child(2),tr[data-status="invalid"] td:nth-child(2){color:#ffb3ac}tr[data-status="success"] td:nth-child(2){color:#9de0bb}#filtered-count{color:var(--muted);font-size:13px}
+
+.overwrite-option{display:flex;align-items:center;gap:10px}.overwrite-option input{width:18px;height:18px;flex:0 0 18px;accent-color:var(--accent)}

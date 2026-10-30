@@ -52,8 +52,9 @@ $('start').addEventListener('click', async () => {
   const rows = inspect().map(row => ({ ...row, status: row.status === 'Ready' ? 'Queued' : row.status }));
   const countQueued = rows.filter(row => row.status === 'Queued').length;
   if (!countQueued || countQueued > MAX_URLS || running) return;
+  const overwrite = $('overwrite').checked;
   running = true; controller = new AbortController();
-  for (const id of ['urls', 'file', 'clear', 'start']) $(id).disabled = true;
+  for (const id of ['urls', 'file', 'clear', 'start', 'overwrite']) $(id).disabled = true;
   $('stop').hidden = false;
   let count = 0, processed = 0;
   try {
@@ -64,7 +65,7 @@ $('start').addEventListener('click', async () => {
       try {
         const result = await downloadVideo(rows[i].url, { signal: controller.signal, maxBytes: 100 * 1024 * 1024 });
         rows[i].status = 'Saving to Downloads'; render(rows);
-        const saved = await saveVideo(result.blob, result.filename, { signal: controller.signal });
+        const saved = await saveVideo(result.blob, result.filename, { signal: controller.signal, overwrite });
         count++;
         rows[i].status = result.note.replace(/^Done/, 'Saved'); rows[i].filename = saved.filename;
       } catch (error) {
@@ -79,7 +80,7 @@ $('start').addEventListener('click', async () => {
   } catch (error) { status(error.message); }
   finally {
     running = false; controller = null; $('stop').hidden = true; $('stop').disabled = false;
-    for (const id of ['urls', 'file', 'clear']) $(id).disabled = false;
+    for (const id of ['urls', 'file', 'clear', 'overwrite']) $(id).disabled = false;
     const ready = parseVideoUrls($('urls').value).filter(row => row.status === 'Ready').length;
     $('start').disabled = !ready || ready > MAX_URLS;
   }

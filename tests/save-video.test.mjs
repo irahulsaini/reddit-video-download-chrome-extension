@@ -50,3 +50,12 @@ test('rejects unsafe paths and reports download permission failures', async () =
   await assert.rejects(saveVideo(new Blob(['mp4']), 'games/clip.mp4', fake), /Permission denied/);
   assert.equal(fake.revoked.length, 1);
 });
+
+test('overwrite replaces the exact destination only when explicitly enabled', async () => {
+  for (const overwrite of [true, false, undefined, 'true']) {
+    const fake = browser({ id: 7, state: 'complete' });
+    await saveVideo(new Blob(['mp4']), 'games/Title.mp4', { ...fake, overwrite });
+    assert.equal(fake.requests[0].conflictAction, overwrite === true ? 'overwrite' : 'uniquify');
+    assert.equal(fake.requests[0].filename, 'videos/games/Title.mp4');
+  }
+});

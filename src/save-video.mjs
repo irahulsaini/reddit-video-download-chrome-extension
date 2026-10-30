@@ -7,13 +7,13 @@ export function downloadPath(filename) {
 }
 
 // Wait for Chrome to confirm the file is saved before releasing its blob URL.
-export async function saveVideo(blob, filename, { signal, api = chrome.downloads, urls = URL } = {}) {
+export async function saveVideo(blob, filename, { signal, overwrite = false, api = chrome.downloads, urls = URL } = {}) {
   const destination = downloadPath(filename);
   if (signal?.aborted) throw new DOMException('Download cancelled.', 'AbortError');
   const url = urls.createObjectURL(blob);
   let id;
   try {
-    id = await api.download({ url, filename: destination, conflictAction: 'uniquify', saveAs: false });
+    id = await api.download({ url, filename: destination, conflictAction: overwrite === true ? 'overwrite' : 'uniquify', saveAs: false });
     return await new Promise((resolve, reject) => {
       let settled = false;
       let actualPath = destination;
