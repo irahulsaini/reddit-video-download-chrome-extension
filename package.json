@@ -1,0 +1,17 @@
+{
+  "name": "reddit-video-download-chrome-extension",
+  "version": "1.3.0",
+  "private": true,
+  "type": "module",
+  "description": "Chrome extension for Reddit and RedGIFs batch downloads with status filters and exports.",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "npm run build && node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "jszip": "3.10.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
